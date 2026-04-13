@@ -30,9 +30,9 @@ function TodoListCard() {
     }, []);
 
     React.useEffect(() => {
-        if (item && items.length === 0) {
+        if (items && items.length === 0) {
             const interval = setInterval(() => {
-                setMessageIndex(prev => (prev + 1) % message.length);
+                setMessageIndex(prev => (prev + 1) % messages.length);
             }, 3000);
             return () => clearInterval(interval);
         }
