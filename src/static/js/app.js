@@ -14,11 +14,29 @@ function App() {
 function TodoListCard() {
     const [items, setItems] = React.useState(null);
 
+    const [messageIndex, setMessageIndex] = React.useState(0);
+
+    const messages = [
+        "No items yet! Add one above!",
+        "Your list is empty, start adding tasks!",
+        "Nothing here...maybe add something?",
+        "All clear! Add a new item to get started."
+    ];
+        
     React.useEffect(() => {
         fetch('/items')
             .then(r => r.json())
             .then(setItems);
     }, []);
+
+    React.useEffect(() => {
+        if (item && items.length === 0) {
+            const interval = setInterval(() => {
+                setMessageIndex(prev => (prev + 1) % message.length);
+            }, 3000);
+            return () => clearInterval(interval);
+        }
+    }, [items]);
 
     const onNewItem = React.useCallback(
         newItem => {
@@ -53,7 +71,7 @@ function TodoListCard() {
         <React.Fragment>
             <AddItemForm onNewItem={onNewItem} />
             {items.length === 0 && (
-                <p className="text-center">No items yet! Add one above!</p>
+                <p className="text-center">{messages[messageIndex]}</p>
             )}
             {items.map(item => (
                 <ItemDisplay
